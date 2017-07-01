@@ -7,11 +7,11 @@ itchat.auto_login(enableCmdQR=2)
 friends = itchat.get_friends()
 
 for f in friends:
-	if f['NickName'] == "培林" or f['NickName']== "张强":
-		print(f)
+	print(f['NickName'])
 
 @itchat.msg_register(SYSTEM)
 def get_uin(msg):
+	print(msg)
 	if msg['SystemInfo'] != 'uins': return
 	ins = itchat.instanceList[0]
 	fullContact = ins.memberList + ins.chatroomList + ins.mpList
@@ -25,6 +25,8 @@ def get_uin(msg):
 def text_reply(msg):
 	print(msg)
 	userName = msg['FromUserName']
+	user = itchat.search_friends(userName=userName)
+	print(user)
 	ins = itchat.instanceList[0]
 	fullContact = ins.memberList + ins.chatroomList + ins.mpList
 	member = itchat.utils.search_dict_list(fullContact, 'UserName',userName)

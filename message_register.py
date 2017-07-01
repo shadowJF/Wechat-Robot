@@ -1,13 +1,15 @@
+import uuid
 import itchat
 import random
 import os
 from child_message_handler import *
 from robot_config import *
 from itchat.content import *
+from short_uid_generator import *
 
 @itchat.msg_register(TEXT,isFriendChat=True, isMpChat=True)
 def text_reply(msg):
-	print(msg)
+	#print(msg)
 	msgHandler = TextMessageHandler()
 	return msgHandler.handleMessage(msg);
 
@@ -18,13 +20,16 @@ def add_friend(msg):
 	response_list = ['你好，很高兴认识你，我是'+robot_name,
 			'你好，上知天文下知地理的'+robot_name+'就是我啦~',
 			'太好了，终于遇见你，以后多多指教哦，我是'+robot_name]
-	itchat.send_msg(random.choice(response_list), msg['RecommendInfo']['UserName'])
+	userName = msg['RecommendInfo']['UserName']
+	itchat.send_msg(random.choice(response_list), userName)
+	uid = generate_short_uid()
+	print(itchat.set_alias(userName,uid))
 
 @itchat.msg_register(TEXT, isGroupChat=True)
 def group_reply(msg):
 	if msg['isAt']:
 		msgHandler = TextMessageHandler()	
-		userid = msg['FromUserName']
+		userid = msg['ActualUserName']
 		text = msg['Content'].replace('@'+robot_name,' ')
 		response = msgHandler.handleMessage(msg,userid,text);
 		itchat.send(u'@%s\u2005 %s' % (msg['ActualNickName'], response), msg['FromUserName'])

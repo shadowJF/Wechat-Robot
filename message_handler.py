@@ -15,7 +15,7 @@ class MessageHandler:
 		headers = {'content-type': 'application/json'}
 		try:
 			r = requests.post(self.__chatRobotApiUrl, data=json.dumps(postJson), headers=headers).json()
-			return self.__handleRobotResult(r)
+			return self.handleRobotResult(r)
 		except:
 			return '机器人出错啦~'
 
@@ -23,7 +23,7 @@ class MessageHandler:
 		apiUrl = robot_voice_url + '&appcode=wechat_personal&tenantid=ublinker&msgtype=voice&deviceid=test&sessionid=test&userid='+userid
 		try:
 			r = requests.post(apiUrl,data=fileBytes).json()
-			return self.__handleRobotResult(r)
+			return self.handleRobotResult(r)
 		except:
 			return '机器人出错啦~'
 
@@ -34,7 +34,7 @@ class MessageHandler:
 		data['userid'] = userid
 		return data
 
-	def __handleRobotResult(self,r):
+	def handleRobotResult(self,r):
 		code = r['code']
 		
 		if code == 100000:
